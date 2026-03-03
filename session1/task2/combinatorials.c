@@ -16,6 +16,22 @@ int factorial(int n) {
   return n * factorial(n - 1);
 }
 
+int validate(int n, int r) {
+  if (r <= n) {
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+int combinations(int n, int r) {
+  return factorial(n) / ( factorial(r) * factorial(n - r));
+}
+
+int permutations(int n, int r) {
+  return factorial(n) / factorial(n - r);
+}
+
 int main(int argc, char **argv) {
   /*
   The program should accept a command line argument as follows:
@@ -40,4 +56,25 @@ int main(int argc, char **argv) {
   You should try and use functions to write your program.
 
   */
+
+  if (argc != 4) {
+    printf("Error: Invalid Input\nUsage: nCr or nPr\n");
+  }
+
+  int n;
+  int r;
+  char type;
+  sscanf(argv[1], "%d", &n);
+  sscanf(argv[3], "%d", &r);
+  sscanf(argv[2], "%c", &type);
+
+  if (validate(n, r) == 1) {
+    return 1;
+  }
+
+  int val = (type=='C') ? combinations(n, r): permutations(n, r);
+  printf("%d%c%d = %d\n", n, type, r, val);
+
+  return 0;
+  
 }
