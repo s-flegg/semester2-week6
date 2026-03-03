@@ -8,12 +8,12 @@ double rectangle_area(int height, int width) {
   return width * height;
 }
 
-void find_circle_area(double radius) {
+double find_circle_area(double radius) {
   return PI * radius * radius;
 }
 
 double triangle_area(double base, double height) {
-  printf("%f\n", 0.5 * base * height);
+  return 0.5 * base * height;
 }
 
 int main(int argc, char *argv[]) {
