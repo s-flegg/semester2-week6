@@ -1,0 +1,3 @@
+Pointers dance in C, 
+Memory flows like a stream
+Segfaults whisper doom
