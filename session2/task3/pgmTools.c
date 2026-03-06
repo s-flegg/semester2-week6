@@ -2,10 +2,13 @@
 #include <stdio.h>
 
 int getUserInput(unsigned char *message);
-void menu(void);
+void printMenu(void);
 unsigned char **allocateArray(int height, int width);
-unsigned char **read(unsigned char *fn, int *a, int *b);
+unsigned char **read(unsigned char *fn, int *a, int *b, int *c);
 void printImage(unsigned char **p, int a, int b);
+int checkDims(int height, int width);
+int checkMaxGrey(unsigned char **pic_arr, int maxGrey, int height, int width);
+// int checkPixelCount(unsigned char *fn, int height, int width);
 
 int main(int argc, unsigned char **argv) {
   if (argc != 2) {
@@ -13,21 +16,29 @@ int main(int argc, unsigned char **argv) {
     return 0;
   }
 
-  int a, b;
-  unsigned char **i;
-  i = read(argv[1], &a, &b);
+  int height, width, maxGrey;
+  unsigned char **img_arr;
+  img_arr = read(argv[1], &height, &width, &maxGrey);
 
-  int c = -1;
+  int errCheck = 0;
+  errCheck += checkDims(height, width);
+  errCheck += checkMaxGrey(img_arr, maxGrey, height, width);
+  // errCheck += checkPixelCount(argv[1], height, width);
+  if (errCheck != 0) {
+    return 1;
+  }
 
+
+  int choice = -1;
   do {
-    c = -1;
-    menu();
-    while (c < 1)
-      c = getUserInput("Enter choice");
+    choice = -1;
+    printMenu();
+    while (choice < 1)
+      choice = getUserInput("Enter choice");
 
-    switch (c) {
+    switch (choice) {
     case 1:
-      printImage(i, a, b);
+      printImage(img_arr, height, width);
       break;
     case 2:
       break;
@@ -56,7 +67,7 @@ int getUserInput(unsigned char *message) {
   return choice;
 }
 
-void menu(void) {
+void printMenu(void) {
   printf("1 - View PGM Image\n");
   printf("2 - Invert Image\n");
   printf("3 - Rotate Image\n");
@@ -73,30 +84,81 @@ unsigned char **allocateArray(int height, int width) {
   return array;
 }
 
-unsigned char **read(unsigned char *fn, int *a, int *b) {
+unsigned char **read(unsigned char *fn, int *a, int *b, int*c) {
   unsigned char temp[10];
-  int h, w;
+  unsigned char maxGrey[10];
+  int height, width;
   FILE *f = fopen(fn, "r");
   fscanf(f, "%s ", temp);
-  fscanf(f, "%d %d", &h, &w);
-  fscanf(f, "%s ", temp);
-  unsigned char **p = allocateArray(h, w);
-  for (int i = 0; i < h; i++) {
-    for (int j = 0; j < w; j++) {
-      fscanf(f, "%hhd", &p[i][j]);
+  fscanf(f, "%d %d", &height, &width);
+  fscanf(f, "%s ", maxGrey);
+  unsigned char **pic_arr = allocateArray(height, width);
+  for (int i = 0; i < height; i++) {
+    for (int j = 0; j < width; j++) {
+      fscanf(f, "%hhd", &pic_arr[i][j]);
     }
   }
-  *a = h;
-  *b = w;
-  return p;
+  fclose(f);
+  *a = height;
+  *b = width;
+  *c = atoi(maxGrey);
+  return pic_arr;
 }
 
-void printImage(unsigned char **p, int a, int b) {
-  for (int i = 0; i < a; i++) {
-    for (int j = 0; j < b; j++) {
-      printf("%d%s", p[i][j],
-             (p[i][j] < 100) ? (p[i][j] < 10) ? "   " : "  " : " ");
+void printImage(unsigned char **pic_arr, int height, int width) {
+  for (int i = 0; i < height; i++) {
+    for (int j = 0; j < width; j++) {
+      printf("%d%s", pic_arr[i][j],
+             (pic_arr[i][j] < 100) ? (pic_arr[i][j] < 10) ? "   " : "  " : " ");
     }
     printf("\n");
   }
 }
+
+int checkDims(int height, int width) {
+  if (height > 0 && width > 0) {
+    return 0;
+  }
+  printf("Error: Bad dimensions\n");
+  return 1;
+}
+
+int checkMaxGrey(unsigned char **pic_arr, int maxGrey, int height, int width) {
+  for (int i=0; i<height; i++) {
+    for (int j=0; j<width; j++) {
+      if (pic_arr[i][j] > maxGrey) {
+        printf("Error: Bad maxGrey\n");
+        return 1;
+      }
+    }
+  }
+  return 0;
+}
+
+// int checkPixelCount(unsigned char *fn, int height, int width) {
+//   unsigned char tempChar[10];
+//   int tempInt;
+//   FILE *f = fopen(fn, "r");
+//   fscanf(f, "%s ", tempChar);
+//   fscanf(f, "%d %d", &tempInt, &tempInt);
+//   fscanf(f, "%s ", tempChar);
+
+//   int i, j = 0;
+//   while (1) {
+//     char val;  
+//     fscanf(f, "%hhd", &val);
+//     if ((val == NULL && j<width) || (val != NULL && j > width) || (val != NULL && i > height)) {
+//       printf("Error: Incorrect amount of pixels\n");
+//       return 1;
+//     } 
+//     if (val == NULL && j == width) {
+//       if (i == height - 1) {
+//         return 0;
+//       }
+//       j=0;
+//       i++;
+//     } else {
+//       j++;
+//     }
+//   }
+// }
