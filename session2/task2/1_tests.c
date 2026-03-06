@@ -24,8 +24,6 @@ void test_obvious_palindrome(void) {
 }
 
 /* ============================================================
- * TODO: Add your test functions below
- *
  * Consider testing:
  * - Single characters: "a"
  * - Empty string: ""
@@ -37,7 +35,41 @@ void test_obvious_palindrome(void) {
  * 1. Call TEST_CHECK(condition) to verify a condition
  * 2. Use TEST_MSG("message") to explain what went wrong if it fails
  * ============================================================ */
+void test_single_char(void) {
+    TEST_CHECK(is_palindrome("a") == 1);
+    TEST_CHECK(is_palindrome("d") == 1);
+    TEST_CHECK(is_palindrome("z") == 1);
+    TEST_MSG("Expected single characters to be paildromes");
+}
 
+void test_empty_string(void) {
+    TEST_CHECK(is_palindrome("") == 1);
+    TEST_MSG("Expected empty string to be a palindrome");
+}
+
+void test_non_palindromes(void) {
+    TEST_CHECK(is_palindrome("hello") == 0);
+    TEST_MSG("Expected hello to not be a palindrome");
+
+    TEST_CHECK(is_palindrome("world") == 0);
+    TEST_MSG("Expected world to not be a palindrome");
+}
+
+void test_even_length_palindromes(void) {
+    TEST_CHECK(is_palindrome("abba") == 1);
+    TEST_MSG("Expected abba to be a palindrome");
+
+    TEST_CHECK(is_palindrome("deed") == 1);
+    TEST_MSG("Expected deed to be a palindrome");
+}
+
+void test_edge_cases(void) {
+    TEST_CHECK(is_palindrome("Racecar") == 1);
+    TEST_MSG("Expected Racecar to be a palidrome/expected no case sensitivity");
+
+    TEST_CHECK(is_palindrome("race car") == 0);
+    TEST_MSG("Expected 'race car' to not be a palindrome/expected spaces to break palidromes");
+}
 
 
 /* ============================================================
@@ -48,10 +80,11 @@ void test_obvious_palindrome(void) {
  * ============================================================ */
 TEST_LIST = {
     { "obvious palindrome (racecar)", test_obvious_palindrome },
-    /* TODO: Add your tests here, e.g.:
-     * { "single character", test_single_char },
-     * { "empty string", test_empty_string },
-     */
+    { "single character", test_single_char },
+    { "empty string", test_empty_string },
+    { "non-palidnrome", test_non_palindromes},
+    { "even length palindromes", test_even_length_palindromes},
+    { "edge cases", test_edge_cases},
     { NULL, NULL }
 };
 
