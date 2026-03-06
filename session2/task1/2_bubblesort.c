@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 
 void bubbleSort(int array[], int n);
 
@@ -30,5 +31,16 @@ int main(void) {
  * @param n The number of elements in the array.
  */
 void bubbleSort(int array[], int n) {
-  // code goes here
+  bool sorted = false;
+  while (!sorted) {
+    sorted = true;
+    for (int i=0; i<n-1; i++) {
+      if (array[i+1] < array[i]) {
+        int temp = array[i];
+        array[i] = array[i+1];
+        array[i+1] = temp;
+        sorted = false;
+      }
+    }
+  }
 }
