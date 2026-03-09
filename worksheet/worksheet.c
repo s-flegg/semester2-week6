@@ -35,6 +35,9 @@ int find_max(int *arr, int n, int *index);
  * STUDENT IMPLEMENTATIONS - Complete these functions
  * ============================================================ */
 
+// Name: Samuel Flegg
+// ID: 202018944
+
 /**
  * Function 1: add_values
  *
